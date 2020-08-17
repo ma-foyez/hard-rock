@@ -52,7 +52,6 @@ function fetchMusic(searchValue) {
             const lyricsElement = musicList[i];
             const artistName = lyricsElement.artist.name;
             const songTitle = lyricsElement.title;
-
             Album.cover = lyricsElement.album.cover;
             Album.songLink = lyricsElement.link;
             fancyResult.innerHTML += `
