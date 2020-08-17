@@ -40,6 +40,7 @@ function inputFunction() {
 async function loadSongByTitle(searchValue) {
     const res = await fetch(`${apiURL}/suggest/${searchValue}`);
     const data = await res.json();
+    console.log(data.data[1]);
     return data;
 }
 
