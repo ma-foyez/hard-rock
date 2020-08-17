@@ -8,22 +8,22 @@ const lyricsTitle = document.querySelector("#single-lyrics h2");
 
 /// api URL ///
 const apiURL = 'https://api.lyrics.ovh';
-let extraInfo = {};
+let Album = {};
 
-//search song with click button
+//search lyrcis with click button
 searchSong.addEventListener("click", function() {
     emptyInput();
 });
 
-//search song with keyboard enter key
-searchSong.addEventListener('keypress', setQuery);
+//search lyrcis with keyboard enter key
+inputSong.addEventListener('keypress', setQuery);
 
 function setQuery(event) {
     if (event.keyCode == 13) {
         emptyInput();
     }
 }
-// search empty input functionality
+// search input functionality
 function emptyInput() {
     if (inputSong.value == "") {
         alert("Please enter a song name");
@@ -31,7 +31,7 @@ function emptyInput() {
         fancyResult.innerHTML = "";
         fetchMusic(inputSong.value);
         toggleElement(singleLyrics, fancyResult);
-        extraInfo.inputSong = inputSong.value;
+        Album.inputSong = inputSong.value;
         inputSong.value = "";
     }
 }
@@ -47,29 +47,24 @@ function fetchMusic(searchValue) {
     const lyrics = loadSongByTitle(searchValue);
     lyrics.then((lyrics) => {
         const musicList = lyrics.data;
-        for (let i = 0; i < musicList.length; i++) {
+        for (let i = 0; i < 10; i++) {
             const lyricsElement = musicList[i];
-            const albumName = lyricsElement.album.title;
             const artistName = lyricsElement.artist.name;
-            const title = lyricsElement.title;
-            extraInfo.cover = lyricsElement.album.cover;
-            extraInfo.songLink = lyricsElement.link;
-
+            const songTitle = lyricsElement.title;
+            Album.cover = lyricsElement.album.cover;
+            Album.songLink = lyricsElement.link;
             fancyResult.innerHTML += `<div class="single-result row align-items-center my-3 p-3">
                                 <div class="col-md-3">
-                                    <img src = '${extraInfo.cover}' alt='cover' >
+                                    <img src = '${Album.cover}' alt='cover' >
                                 </div>
                                 <div class="col-md-6">
-                                    <h3 class="lyrics-name">${title}</h3>
+                                    <h3 class="lyrics-name">${songTitle}</h3>
                                     <p class="author lead">Album by <span>${artistName}</span></p>
                                 </div>
                                 <div class="col-md-3 text-md-right text-center">
-                                    <button onclick="getLyrics('${artistName}','${title}')" class="btn btn-success">Get Lyrics</button>
+                                    <button onclick="getLyrics('${artistName}','${songTitle}')" class="btn btn-success">Get Lyrics</button>
                                 </div>
                                 </div>`;
-            if (i === 9) {
-                break;
-            }
         }
     });
 }
@@ -91,28 +86,19 @@ function getLyrics(artistName, title) {
     lyrics.then((lyric) => {
         if (lyric.lyrics) {
             lyricsContainer.innerHTML = lyric.lyrics;
-            albumCover.src = extraInfo.cover;
-            hearSongButton.href = extraInfo.songLink;
+            albumCover.src = Album.cover;
+            hearSongButton.href = Album.songLink;
         } else {
             lyricsContainer.innerHTML = "Sorry! Lyrics not available.";
             albumCover.src = "";
         }
-        //=======
-        document.getElementById('go-back').addEventListener('click', function() {
-                fancyResult.innerHTML = "";
-                fetchMusic(extraInfo.inputSong);
-                toggleElement(singleLyrics, fancyResult);
-                console.log("clicked by song")
-            })
-            //===========
-            //     const goToButton = document.querySelector(".go-back");
-            //     goToButton.onclick = function() {
-            //         fancyResult.innerHTML = "";
-            //         fetchMusic(extraInfo.inputSong);
-            //         toggleElement(singleLyrics, fancyResult);
-            //     };
-
-        //     lyricsTitle.innerHTML = title + " - " + artistName;
+        const goBack = document.querySelector(".btn .go-back");
+        goBack.onclick = function() {
+            fancyResult.innerHTML = "";
+            fetchMusic(Album.songInput);
+            toggleElement(singleLyrics, fancyResult);
+        };
+        lyricsTitle.innerHTML = title + " - " + artistName;
     });
 }
 
