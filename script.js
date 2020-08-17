@@ -12,7 +12,7 @@ let Album = {};
 
 //search lyrcis with click button
 searchSong.addEventListener("click", function() {
-    emptyInput();
+    inputFunction();
 });
 
 //search lyrcis with keyboard enter key
@@ -20,11 +20,11 @@ inputSong.addEventListener('keypress', setQuery);
 
 function setQuery(event) {
     if (event.keyCode == 13) {
-        emptyInput();
+        inputFunction();
     }
 }
 // search input functionality
-function emptyInput() {
+function inputFunction() {
     if (inputSong.value == "") {
         alert("Please enter a song name");
     } else {
@@ -42,7 +42,7 @@ async function loadSongByTitle(searchValue) {
     return data;
 }
 
-//display data into html body
+//display data
 function fetchMusic(searchValue) {
     const lyrics = loadSongByTitle(searchValue);
     lyrics.then((lyrics) => {
@@ -76,7 +76,7 @@ async function loadLyrics(artistName, title) {
     return data;
 }
 
-//getLyrics by artistName and title
+//getLyrics by artist name and lyrics title
 function getLyrics(artistName, title) {
     toggleElement(fancyResult, singleLyrics);
     const lyrics = loadLyrics(artistName, title);
@@ -89,20 +89,21 @@ function getLyrics(artistName, title) {
             albumCover.src = Album.cover;
             hearSongButton.href = Album.songLink;
         } else {
-            lyricsContainer.innerHTML = "Sorry! Lyrics not available.";
+            lyricsContainer.innerHTML = "Sorry! Lyrics is not available at the moment.";
             albumCover.src = "";
         }
-        const goBack = document.querySelector(".btn .go-back");
+        const goBack = document.querySelector(".btn.go-back");
         goBack.onclick = function() {
             fancyResult.innerHTML = "";
             fetchMusic(Album.songInput);
             toggleElement(singleLyrics, fancyResult);
         };
+
         lyricsTitle.innerHTML = title + " - " + artistName;
     });
 }
 
-//change Element display state
+//change display state
 function toggleElement(hideElement, displayElement) {
     hideElement.style.display = "none";
     displayElement.style.display = "block";
