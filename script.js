@@ -23,6 +23,7 @@ function setQuery(event) {
         inputFunction();
     }
 }
+
 // search input functionality
 function inputFunction() {
     if (inputSong.value == "") {
@@ -49,22 +50,28 @@ function fetchMusic(searchValue) {
         const musicList = lyrics.data;
         for (let i = 0; i < 10; i++) {
             const lyricsElement = musicList[i];
+            const ID = lyricsElement.id;
             const artistName = lyricsElement.artist.name;
             const songTitle = lyricsElement.title;
+            const audio = lyricsElement.preview;
             Album.cover = lyricsElement.album.cover;
             Album.songLink = lyricsElement.link;
-            fancyResult.innerHTML += `<div class="single-result row align-items-center my-3 p-3">
-                                <div class="col-md-3">
-                                    <img src = '${Album.cover}' alt='cover' >
-                                </div>
-                                <div class="col-md-6">
-                                    <h3 class="lyrics-name">${songTitle}</h3>
-                                    <p class="author lead">Album by <span>${artistName}</span></p>
-                                </div>
-                                <div class="col-md-3 text-md-right text-center">
-                                    <button onclick="getLyrics('${artistName}','${songTitle}')" class="btn btn-success">Get Lyrics</button>
-                                </div>
-                                </div>`;
+            fancyResult.innerHTML += `
+            <div class="single-result row align-items-center my-3 p-3">
+                <div class="col-md-3">
+                <img src = '${Album.cover}' alt='cover' >
+            </div>
+             <div class="col-md-6 text-center">
+                <h3 class="lyrics-name">${songTitle}</h3>
+                <p class="author lead">Album by <span>${artistName}</span></p>
+                <audio controls class="audioPlay">
+                    <source src='${audio}' type="audio/ogg">
+                 </audio>
+            </div>
+            <div class="col-md-3 text-md-right text-center">
+                <button onclick="getLyrics('${artistName}','${songTitle}')" id="${ID}" class="btn btn-success getLyrics">Get Lyrics</button>
+            </div>
+        </div>`;
         }
     });
 }
@@ -84,6 +91,7 @@ function getLyrics(artistName, title) {
     let albumCover = document.getElementById("albumCover");
 
     lyrics.then((lyric) => {
+
         if (lyric.lyrics) {
             lyricsContainer.innerHTML = lyric.lyrics;
             albumCover.src = Album.cover;

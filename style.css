@@ -45,6 +45,17 @@ body {
     transition: all 5s;
 }
 
+.lyrics-name {
+    color: lightsalmon;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.audioPlay {
+    outline: none;
+    border: none;
+}
+
 .single-lyrics {
     display: none;
 }
