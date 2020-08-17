@@ -40,7 +40,6 @@ function inputFunction() {
 async function loadSongByTitle(searchValue) {
     const res = await fetch(`${apiURL}/suggest/${searchValue}`);
     const data = await res.json();
-    console.log(data.data[1]);
     return data;
 }
 
@@ -51,10 +50,9 @@ function fetchMusic(searchValue) {
         const musicList = lyrics.data;
         for (let i = 0; i < 10; i++) {
             const lyricsElement = musicList[i];
-            const ID = lyricsElement.id;
             const artistName = lyricsElement.artist.name;
             const songTitle = lyricsElement.title;
-            const audio = lyricsElement.preview;
+
             Album.cover = lyricsElement.album.cover;
             Album.songLink = lyricsElement.link;
             fancyResult.innerHTML += `
@@ -65,12 +63,10 @@ function fetchMusic(searchValue) {
              <div class="col-md-6 text-center">
                 <h3 class="lyrics-name">${songTitle}</h3>
                 <p class="author lead">Album by <span>${artistName}</span></p>
-                <audio controls class="audioPlay">
-                    <source src='${audio}' type="audio/ogg">
-                 </audio>
+              
             </div>
             <div class="col-md-3 text-md-right text-center">
-                <button onclick="getLyrics('${artistName}','${songTitle}')" id="${ID}" class="btn btn-success getLyrics">Get Lyrics</button>
+                <button onclick="getLyrics('${artistName}','${songTitle}')" class="btn btn-success getLyrics">Get Lyrics</button>
             </div>
         </div>`;
         }
@@ -111,7 +107,6 @@ function getLyrics(artistName, title) {
         lyricsTitle.innerHTML = title + " - " + artistName;
     });
 }
-
 //change display state
 function toggleElement(hideElement, displayElement) {
     hideElement.style.display = "none";
